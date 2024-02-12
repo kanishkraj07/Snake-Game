@@ -1,0 +1,149 @@
+body {
+    background-color: #789461;
+}
+
+img {
+    width: 11%;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    position: absolute;
+}
+
+#apple {
+    max-width: 45px;
+    max-height: 45px;
+    color: #e7471d;
+    position: absolute;
+    font-size: 2em;
+    z-index: 1;
+    transform: translate(8px, 5px);
+    animation: scaleUpAnimate 1s ease-in 0s infinite normal;
+}
+
+@keyframes scaleUpAnimate {
+    0% {
+        scale: 1;
+    }
+
+    50% {
+        scale: 1.2;
+    }
+
+    100% {
+        scale: 1;
+    }
+}
+
+.game-container {
+    width: 675px;
+    aspect-ratio: 1/1;
+    background-color: #f0ead2;
+    border: 5px solid #f2e8cf;
+    border-radius: 10px;
+    position: relative;
+    margin: 8em auto 0;
+}
+
+.game-grid {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    position: relative;
+    grid-template-rows: repeat(15, 1fr);
+    grid-template-columns: repeat(15, 1fr);
+}
+
+.game-play-ground {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: #DBE7C9;
+    z-index: 1;
+    opacity: 0.9;
+}
+
+.white-grid-item {
+    background-color: rgba(255,255,255, 0.4);
+}
+
+.black-grid-item {
+    background-color: rgba(0,0,0, 0.4);
+}
+
+.snake {
+}
+
+.snake-head {
+    width: 0;
+    height: 0;
+    border-left: 45px solid #15c;
+    border-bottom: 22.5px solid transparent;
+    border-top: 22.5px solid transparent;
+    position: relative;
+}
+
+.left-eye, .right-eye {
+    width: 8px;
+    height: 7px;
+    background-color: white;
+    border-radius: 50%;
+    right: 5%;
+    position: absolute;
+    margin: 3px 25px;
+    border-right: 6px solid
+}
+
+.tail {
+    width: 45px;
+    height: 30px;
+    background-color: #15c;
+    z-index: 1;
+    position: absolute;
+    border-right: 1px solid white;
+    margin-top: 7px;
+}
+
+.left-eye {
+    top: 10%;
+}
+
+.right-eye {
+    bottom: 10%;
+}
+
+.score-section {
+    width: 30%;
+    height: 7%;
+    background-color: #fdf0d5;
+    position: absolute;
+    z-index: -1;
+    bottom: 100%;
+    left: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.score i {
+    max-width: 45px;
+    max-height: 45px;
+    color: #e7471d;
+    font-size: 2em;
+}
+
+.high-score i {
+    max-width: 45px;
+    max-height: 45px;
+    color: #fdc001;
+    font-size: 2em;
+}
+
+.score-value, .high-score-value {
+    font-size: 1.6em;
+    color: #003049;
+    font-family: 'Fira Sans', sans-serif;
+    font-weight: 500;
+}

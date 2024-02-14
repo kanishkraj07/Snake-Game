@@ -11,11 +11,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
 </head>
 <body>
 <div class="game-container">
     <img src="assets/clipart1219200.png">
     <div class="game-grid">
+        <div class="start-game-key">Press <strong>ENTER</strong> to Start the Game</div>
         <div class="game-play-ground">
             <div class="snake" id="snake">
                 <div class="snake-head" id="snake-head">
@@ -39,7 +42,12 @@
     </div>
 </div>
 
-
+<dialog id="gameOverDialog">
+    <div class="game-over">
+        <div class="game-over-header">Game Over</div>
+        <button class="play-again" id="play-again">Play Again</button>
+    </div>
+</dialog>
 
 <script src="game.js"></script>
 </body>

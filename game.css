@@ -147,3 +147,55 @@ img {
     font-family: 'Fira Sans', sans-serif;
     font-weight: 500;
 }
+
+.start-game-key {
+    position: absolute;
+    color: rgba(0,0,0,0.6);
+    font-size: 1.5em;
+    font-family: 'Fira Sans', sans-serif;
+    z-index: 10;
+    width: 100%;
+    text-align: center;
+    top: 41%;
+}
+
+
+#gameOverDialog {
+    background-color: #a7c957;
+    border-radius: 10px;
+    padding: 2em 3em;
+}
+
+#gameOverDialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.game-over {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.game-over-header {
+    font-size: 3em;
+    font-family: "Inconsolata", monospace;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.play-again {
+    font-size: 2em;
+    font-family: "Creepster", system-ui;
+    outline: none;
+    color: #ee6055;
+    border: none;
+    background-color: #e8fccf;
+    text-align: center;
+    font-weight: 500;
+    border-radius: 10px;
+    padding: 5px 15px;
+    cursor: pointer;
+}

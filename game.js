@@ -5,6 +5,9 @@ const snakeHead = document.querySelector('.snake-head')
 const apple = document.querySelector('#apple');
 const scoreArea = document.querySelector('.score-value');
 const highScoreArea = document.querySelector('.high-score-value');
+const startGameKey = document.querySelector('.start-game-key');
+const gameOverDialog = document.querySelector('#gameOverDialog');
+const playAgainBtn = document.querySelector('#play-again');
 
 let singleGridWidth  = gameGrid.clientWidth/totalNoOfGrids;
 let singleGridHeight = gameGrid.clientHeight/totalNoOfGrids;
@@ -15,44 +18,53 @@ const snakeParts = [];
 let snakeDirection = 'ArrowRight';
 const allDirections = [snakeDirection];
 let score = 0;
+let isGameStarted = false;
 let isGameOver = false;
 let isCollision = false;
 let snakePositionsMap = new Map();
 const appleEatAudio = new Audio();
 
 const initialGroundSetup = () => {
-  for(let i=1; i<=225; i++) {
-      const gridEle = document.createElement('div');
-      if(i%2 !== 0) {
-          gridEle.classList.add('white-grid-item');
-      } else {
-          gridEle.classList.add('black-grid-item');
-      }
-      gameGrid.appendChild(gridEle);
-  }
+    for(let i=1; i<=225; i++) {
+        const gridEle = document.createElement('div');
+        if(i%2 !== 0) {
+            gridEle.classList.add('white-grid-item');
+        } else {
+            gridEle.classList.add('black-grid-item');
+        }
+        gameGrid.appendChild(gridEle);
+    }
 
-  appleEatAudio.src = 'assets/eat-audio.mp3';
-  appleEatAudio.preload = 'auto';
-  scoreArea.innerText = 0;
-  if(window.localStorage.getItem('HIGH_SCORE')) {
-      highScoreArea.innerText = window.localStorage.getItem('HIGH_SCORE');
-  } else {
-      highScoreArea.innerText = 0;
-  }
-  snakePosition.x = 0;
-  snakePosition.y = singleGridHeight * Math.floor(totalNoOfGrids/2);
-  snakeHead.style.top = `${snakePosition.y}px`;
+    appleEatAudio.src = 'assets/eat-audio.mp3';
+    appleEatAudio.preload = 'auto';
+    scoreArea.innerText = 0;
+    if(window.localStorage.getItem('HIGH_SCORE')) {
+        highScoreArea.innerText = window.localStorage.getItem('HIGH_SCORE');
+    } else {
+        highScoreArea.innerText = 0;
+    }
+    snakePosition.x = 0;
+    snakePosition.y = singleGridHeight * Math.floor(totalNoOfGrids/2);
+    snakeHead.style.top = `${snakePosition.y}px`;
 
-  snakeParts.push({x: snakePosition.x , y: snakePosition.y, targetDirection: snakeDirection, ref: snakeHead});
-  snakePositionsMap.set(`x:${snakePosition.x}, y:${snakePosition.y}`, 1);
-  applePosition.x = singleGridWidth * 8;
-  applePosition.y = snakePosition.y;
-  apple.style.left = `${applePosition.x}px`;
-  apple.style.top = `${applePosition.y}px`;
+    snakeParts.push({x: snakePosition.x , y: snakePosition.y, targetDirection: snakeDirection, ref: snakeHead});
+    snakePositionsMap.set(`x:${snakePosition.x}, y:${snakePosition.y}`, 1);
+    applePosition.x = singleGridWidth * 8;
+    applePosition.y = snakePosition.y;
+    apple.style.left = `${applePosition.x}px`;
+    apple.style.top = `${applePosition.y}px`;
 }
+
 
 document.body.addEventListener('keydown', (event) => {
     const keyType = event.code
+
+    if(keyType === "Enter" && !isGameStarted) {
+        isGameStarted = true;
+        startGameKey.remove();
+        startGame();
+    }
+
     if(!isReverseDirection(keyType) && (keyType === "ArrowUp" || keyType === "ArrowRight" || keyType === "ArrowDown" || keyType === "ArrowLeft")) {
         allDirections.push(keyType);
     }
@@ -65,32 +77,15 @@ const isReverseDirection = (keyType) => {
         snakeDirection === "ArrowRight" && keyType === "ArrowLeft");
 }
 
-const setNewApplePos = () => {
-    applePosition.x = Math.floor(Math.random() * 15) * singleGridWidth;
-    applePosition.y = Math.floor(Math.random() * 15) * singleGridHeight;
-    const key = `x:${applePosition.x}, y:${applePosition.y}`;
-    if(!snakePositionsMap.has(key)) {
-        apple.style.left = `${applePosition.x}px`;
-        apple.style.top = `${applePosition.y}px`;
-    } else {
-        setNewApplePos();
-    }
+
+const startGame = () => {
+    moveSnake({x: 5, y: 5});
 }
 
-const detectCollisions = () => {
-    const snakeHeaderPart = snakeParts[0];
-    snakePosition.x = snakeHeaderPart.x;
-    snakePosition.y = snakeHeaderPart.y;
-    if(snakeHeaderPart.targetDirection === "ArrowRight") {
-        snakePosition.x += singleGridWidth;
-    } else if(snakeHeaderPart.targetDirection === "ArrowDown") {
-        snakePosition.y += singleGridHeight;
-    } else if(snakeHeaderPart.targetDirection === "ArrowLeft") {
-        snakePosition.x -= singleGridWidth;
-    } else if (snakeHeaderPart.targetDirection === "ArrowUp") {
-        snakePosition.y -= singleGridHeight;
-    }
-    return snakePositionsMap.has(`x:${snakePosition.x}, y:${snakePosition.y}`)  || !checkSnakeRange();
+const moveSnake = (defaultPos) => {
+    requestAnimationFrame(() => {
+        updateSnakePosition(defaultPos);
+    });
 }
 
 const updateSnakePosition = (defaultPos) => {
@@ -161,6 +156,34 @@ const updateSnakePosition = (defaultPos) => {
     isGameOver ? gameOver() : moveSnake(defaultPos);
 }
 
+const setNewApplePos = () => {
+    applePosition.x = Math.floor(Math.random() * 15) * singleGridWidth;
+    applePosition.y = Math.floor(Math.random() * 15) * singleGridHeight;
+    const key = `x:${applePosition.x}, y:${applePosition.y}`;
+    if(!snakePositionsMap.has(key)) {
+        apple.style.left = `${applePosition.x}px`;
+        apple.style.top = `${applePosition.y}px`;
+    } else {
+        setNewApplePos();
+    }
+}
+
+const detectCollisions = () => {
+    const snakeHeaderPart = snakeParts[0];
+    snakePosition.x = snakeHeaderPart.x;
+    snakePosition.y = snakeHeaderPart.y;
+    if(snakeHeaderPart.targetDirection === "ArrowRight") {
+        snakePosition.x += singleGridWidth;
+    } else if(snakeHeaderPart.targetDirection === "ArrowDown") {
+        snakePosition.y += singleGridHeight;
+    } else if(snakeHeaderPart.targetDirection === "ArrowLeft") {
+        snakePosition.x -= singleGridWidth;
+    } else if (snakeHeaderPart.targetDirection === "ArrowUp") {
+        snakePosition.y -= singleGridHeight;
+    }
+    return snakePositionsMap.has(`x:${snakePosition.x}, y:${snakePosition.y}`)  || !checkSnakeRange();
+}
+
 const playAudio = () => {
     let promise = appleEatAudio.play();
     if (promise !== undefined) {
@@ -179,18 +202,11 @@ const gameOver = () => {
     if(!window.localStorage.getItem('HIGH_SCORE') || window.localStorage.getItem('HIGH_SCORE') < score) {
         window.localStorage.setItem('HIGH_SCORE', score)
     }
+    gameOverDialog.showModal();
 };
 
-const moveSnake = (defaultPos) => {
-    requestAnimationFrame(() => {
-        updateSnakePosition(defaultPos);
-    });
-}
+playAgainBtn.addEventListener('click', () => {
+    window.location.reload();
+})
 
-
-const startGame = () => {
-    initialGroundSetup();
-    moveSnake({x: 5, y: 5});
-}
-
-startGame();
+initialGroundSetup();

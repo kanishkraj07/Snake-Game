@@ -37,7 +37,7 @@ img {
 
 .game-container {
     width: 675px;
-    aspect-ratio: 1/1;
+    height: 675px;
     background-color: #f0ead2;
     border: 5px solid #f2e8cf;
     border-radius: 10px;
